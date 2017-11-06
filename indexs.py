@@ -8,11 +8,12 @@ import datetime
 now = time.localtime()
 data1 = datetime.datetime(now[0], now[1], now[2])
 
-es=Elasticsearch("http://172.20.10.16:9200",http_auth=('Goun', r'fangjipu1314@'))
+es=Elasticsearch("http://127.0.0.1:9200",http_auth=('Goun', r'xxxx'))
 
 
 res = es.cat.indices()
 
+# 发现所有非关闭状态的index name
 l = res.split('\n')
 def dindex(day=5):
     index = []
@@ -29,6 +30,7 @@ def dindex(day=5):
                         index.append(f[2])
     return index
 
+# 发现所有状态为close的index name
 g = res.split('\n')
 def gindex():
     index = []
