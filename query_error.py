@@ -32,12 +32,12 @@ class ES_API:
         else:
             return (v['hits']['hits'])
 
-
+# 获取日志
 def get_data(index):
     date = time.strftime('%Y.%m.%d', time.localtime(time.time()))
     url="http://172.20.10.16:9200/%s-%s/_search" %(index, date)
     headers={'Content-Type':'application/json'}
-    # 添加监控关键字，目前只支持单一检索
+    # 添加监控关键字，多个关键字用|分割
     data={
          "query": {
              "match": {
@@ -50,6 +50,7 @@ def get_data(index):
     C=ES_API(url, data, headers)
     return C.process()
 
+# 应为我的索引都为xx-2017.xx.xx格式，所以indexs为我的索引名，并根据我的indexs，开启多线程
 def data():
     indexs=['rapp', 'rweb']
     pool = ThreadPool(len(indexs))
@@ -58,6 +59,7 @@ def data():
     pool.join()
     return  results
 
+# 对数据进行处理，只需要5分钟内的数据信息，当然也可以在API post提交数据时执行
 def returnData():
     value = {}
     for i in data():
@@ -77,6 +79,7 @@ def returnData():
                     ff = ff + 1
     return value
 
+# 报警的话，测了微信或者邮件，都是满足的
 def if_null():
     if returnData():
         print "准备报警发送！"
