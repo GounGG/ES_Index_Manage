@@ -6,6 +6,7 @@ import time
 from multiprocessing.dummy import Pool as ThreadPool
 import  re
 from weixin import Send_Message
+from mail import send_mail
 
 '''
 delect index    url:"http://192.168.30.135:9200/app-2017.05.16"  headers:'Content-Type: application/json' data:{"query": {"match_all":{}}}'
@@ -83,8 +84,8 @@ def returnData():
 def if_null():
     if returnData():
         print "准备报警发送！"
-        s = Send_Message(returnData())
-        s.send_message()
+        # 为了方便查看，输出json格式，replace主要是处理json为自动生产\符号，需要处理掉，不然无法输出中文
+        send_mail(User, "ELK日志报警", json.dumps(returnData(), ensure_ascii=False,sort_keys=True, indent=2).replace('\\\\', '\\'))
         print "报警发送成功！"
         print "#################################分割线#######################################"
     else:
