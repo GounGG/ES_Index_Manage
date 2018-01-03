@@ -71,7 +71,7 @@ def returnData():
                 tt = re.search(r'^([0-9]{4}-[0-9]{2}-[0-9]{2})[a-zA-Z]+([0-9]{2}:[0-9]{2}:[0-9]{2}).*$', t)
                 realtime = str(tt.group(1)) + str(tt.group(2))
                 timeArray = time.strptime(realtime, "%Y-%m-%d%H:%M:%S")
-                timeDiff = time.time() - time.mktime(timeArray)
+                timeDiff = time.time() - time.mktime(timeArray) - 28800
                 if int(timeDiff) < 300:
                     v = {}
                     v['time'] = str(tt.group(1)) + ' ' + str(tt.group(2))
