@@ -46,6 +46,7 @@ def Close_action(index_name, alias_name, day):
     ilo.filter_by_age(source='creation_date', direction='older', unit='days', unit_count=day)
     # 进行移除别名操作
     try:
+      # 在使用alias做查询时，会应为关闭的索引还有别名，导致返回403，所以我们需要移除别名
       Remove_alias(name = alias_name, ilo = ilo).run()
     except Exception as e:
       raise "移除名别失败"
