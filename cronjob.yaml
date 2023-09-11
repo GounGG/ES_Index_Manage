@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: es-index-cleaner
+spec:
+  schedule: 55 23 * * *
+  concurrencyPolicy: Forbid
+  suspend: false
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+            - name: es-index-cleaner
+              image: es-index-manage:0.0.1
+              env:
+                - name: ES_URL
+                  value: http://elasticsearch:9200
+                - name: ES_USER
+                  value: elastic
+                - name: ES_PASSWORD
+                  value: xxxx
+                - name: ES_INDEX_PREFIX
+                  value: xxxx
+                - name: RETENTION_DAY
+                  value: '30'
+              securityContext:
+                runAsUser: 1000
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext:
+            runAsUser: 1000
+          schedulerName: default-scheduler
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
